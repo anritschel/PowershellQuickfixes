@@ -16,9 +16,14 @@ Sort-Object metric1 | select nexthop
 #performs network tests and adjusts message box information
 if (Test-connection $gateway.nexthop) {
     Write-Host "We were able to reach your router"
-    if (Test-Connection 8.8.8.8 -ErrorAction SilentlyContinue){
+    if (Test-Connection google.com -ErrorAction SilentlyContinue){
         $messageBoxBody = "Internet is working"
         [System.Windows.MessageBox]::Show($messageBoxBody,$messageBoxTitle,$messageBoxButton,$messageBoxIcon)    }
+    elseif (Test-Connection 8.8.8.8 -ErrorAction SilentlyContinue) {
+        $messageBoxBody = "The DNS server is down, but the internet is working. Please contact Sora and we will investigate the outage. 309-693-7672"
+        [System.Windows.MessageBox]::Show($messageBoxBody,$messageBoxTitle,$messageBoxButton,$messageBoxIcon)    
+    }
+    }
     else{
         $messageBoxBody = "We were able to reach your router, but not the internet, your ISP may be experiencing an outage. Please contact Sora and we will reach out to your ISP on your behalf. 309-693-7672"
         $messageBoxIcon = [System.Windows.MessageBoxImage]::Error
