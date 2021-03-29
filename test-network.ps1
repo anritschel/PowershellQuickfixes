@@ -1,4 +1,4 @@
-
+#TODO: Add ping timer for each device
 #create message box window & display starting message for the user
 Add-Type -AssemblyName PresentationFramework
 $messageBoxTitle = "Sora Technologies Network Test"
@@ -16,6 +16,7 @@ Sort-Object metric1 | select nexthop
 #performs network tests and adjusts message box information
 if (Test-connection $gateway.nexthop) {
     Write-Host "We were able to reach your router"
+    Write-Host "Now testing DNS"
     if (Test-Connection google.com -ErrorAction SilentlyContinue){
         $messageBoxBody = "Internet is working"
         [System.Windows.MessageBox]::Show($messageBoxBody,$messageBoxTitle,$messageBoxButton,$messageBoxIcon)    }
@@ -28,8 +29,8 @@ if (Test-connection $gateway.nexthop) {
         $messageBoxBody = "We were able to reach your router, but not the internet, your ISP may be experiencing an outage. Please contact Sora and we will reach out to your ISP on your behalf. 309-693-7672"
         $messageBoxIcon = [System.Windows.MessageBoxImage]::Error
         [System.Windows.MessageBox]::Show($messageBoxBody,$messageBoxTitle,$messageBoxButton,$messageBoxIcon)    }
-}
 else{
+    #tries to renew IP configuration if unable to reach router
     Write-Host "We were unable to reach your router trying to resolve..."
     ipconfig /release 
     ipconfig /renew
